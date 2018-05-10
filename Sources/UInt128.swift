@@ -613,6 +613,20 @@ extension UInt128 : CustomStringConvertible {
         // Will store the final string result.
         var result = String()
 
+        // workaround for fast HEX output
+        if radix == 16 {
+            let lowerString = String(value.lowerBits, radix: radix)
+            if value.upperBits == 0 {
+                result = lowerString
+            }
+            else {
+                result = String(value.upperBits, radix: radix)
+                result.append(String(repeating: "0", count: 16 - lowerString.count))
+                result += lowerString
+            }
+            return result
+        }
+
         // Used as the check for indexing through UInt128 for string interpolation.
         var divmodResult = (quotient: self, remainder: UInt128(0))
         // Will hold the pool of possible values.

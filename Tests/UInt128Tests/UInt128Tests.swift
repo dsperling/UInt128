@@ -1061,3 +1061,26 @@ class FloatingPointInterworkingTests : XCTestCase {
     }
 }
 
+class PerformanceTests : XCTestCase {
+
+    func testStringPerformance64() {
+        let value: UInt64 = 17434549027881090559
+        measure {
+            // takes 0.9 seconds
+            for _ in 0..<100 {
+                _ = String(value, radix: 16)
+            }
+        }
+    }
+
+    func testStringPerformance128() {
+        let value = UInt128(upperBits: 17434549027881090559, lowerBits: 18373836492640810226)
+        measure {
+            // takes 78 seconds without the workaround
+            // 1.1 seconds with the workaround
+            for _ in 0..<100 {
+                _ = String(value, radix: 16)
+            }
+        }
+    }
+}
